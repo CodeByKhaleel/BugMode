@@ -1,0 +1,129 @@
+{
+  "name": "bugmode",
+  "displayName": "BugMode",
+  "description": "Context Engineering Layer for AI debugging — generate optimized prompts from errors, stack traces, and logs.",
+  "version": "0.0.1",
+  "publisher": "bugmode",
+  "private": true,
+  "engines": {
+    "vscode": "^1.89.0"
+  },
+  "categories": [
+    "Other",
+    "Debuggers"
+  ],
+  "keywords": [
+    "debugging",
+    "ai",
+    "claude",
+    "cursor",
+    "context",
+    "stack trace"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "bugmode.generateForClaude",
+        "title": "BugMode: Generate for Claude",
+        "icon": "$(bug)"
+      },
+      {
+        "command": "bugmode.generateForCursor",
+        "title": "BugMode: Generate for Cursor",
+        "icon": "$(bug)"
+      },
+      {
+        "command": "bugmode.generateGeneric",
+        "title": "BugMode: Generate Debug Context",
+        "icon": "$(bug)"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "bugmode.submenu",
+          "group": "bugmode@1",
+          "when": "editorHasSelection"
+        }
+      ],
+      "bugmode.submenu": [
+        {
+          "command": "bugmode.generateForClaude",
+          "group": "1_generate@1"
+        },
+        {
+          "command": "bugmode.generateForCursor",
+          "group": "1_generate@2"
+        },
+        {
+          "command": "bugmode.generateGeneric",
+          "group": "1_generate@3"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "bugmode.submenu",
+        "label": "BugMode 🐛"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "bugmode.generateForClaude",
+        "key": "ctrl+shift+b",
+        "mac": "cmd+shift+b",
+        "when": "editorHasSelection"
+      }
+    ],
+    "configuration": {
+      "title": "BugMode",
+      "properties": {
+        "bugmode.defaultTarget": {
+          "type": "string",
+          "enum": [
+            "claude",
+            "cursor",
+            "generic"
+          ],
+          "default": "claude",
+          "description": "Default AI target for prompt generation"
+        },
+        "bugmode.debugMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose debug logging"
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "bugmode.panel",
+          "name": "BugMode",
+          "icon": "$(bug)",
+          "contextualTitle": "BugMode Debug Context"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "package": "vsce package --no-dependencies",
+    "vscode:prepublish": "pnpm run build"
+  },
+  "dependencies": {
+    "@bugmode/core-engine": "workspace:*",
+    "@bugmode/parsers": "workspace:*",
+    "@bugmode/prompt-builder": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "20",
+    "@types/vscode": "^1.89.0",
+    "@vscode/vsce": "^2.26.1",
+    "typescript": "^5.4.5"
+  }
+}
