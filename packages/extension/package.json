@@ -38,6 +38,21 @@
         "command": "bugmode.generateGeneric",
         "title": "BugMode: Generate Debug Context",
         "icon": "$(bug)"
+      },
+      {
+        "command": "bugmode.terminalGenerateForClaude",
+        "title": "BugMode 🐛: Generate for Claude",
+        "icon": "$(bug)"
+      },
+      {
+        "command": "bugmode.terminalGenerateForCursor",
+        "title": "BugMode 🐛: Generate for Cursor",
+        "icon": "$(bug)"
+      },
+      {
+        "command": "bugmode.terminalGenerateGeneric",
+        "title": "BugMode 🐛: Generate Debug Context",
+        "icon": "$(bug)"
       }
     ],
     "menus": {
@@ -46,6 +61,13 @@
           "submenu": "bugmode.submenu",
           "group": "bugmode@1",
           "when": "editorHasSelection"
+        }
+      ],
+      "terminal/context": [
+        {
+          "submenu": "bugmode.terminalSubmenu",
+          "group": "bugmode@1",
+          "when": "terminalHasBeenCreated"
         }
       ],
       "bugmode.submenu": [
@@ -61,11 +83,29 @@
           "command": "bugmode.generateGeneric",
           "group": "1_generate@3"
         }
+      ],
+      "bugmode.terminalSubmenu": [
+        {
+          "command": "bugmode.terminalGenerateForClaude",
+          "group": "1_generate@1"
+        },
+        {
+          "command": "bugmode.terminalGenerateForCursor",
+          "group": "1_generate@2"
+        },
+        {
+          "command": "bugmode.terminalGenerateGeneric",
+          "group": "1_generate@3"
+        }
       ]
     },
     "submenus": [
       {
         "id": "bugmode.submenu",
+        "label": "BugMode 🐛"
+      },
+      {
+        "id": "bugmode.terminalSubmenu",
         "label": "BugMode 🐛"
       }
     ],
