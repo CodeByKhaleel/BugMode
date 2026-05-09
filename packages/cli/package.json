@@ -1,0 +1,20 @@
+{
+  "name": "@bugmode/cli",
+  "version": "0.0.1",
+  "bin": {
+    "bugmode": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && chmod +x dist/cli.js",
+    "dev": "tsc -p tsconfig.json --watch"
+  },
+  "dependencies": {
+    "@bugmode/core-engine": "workspace:*",
+    "@bugmode/parsers": "workspace:*",
+    "@bugmode/prompt-builder": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "20.x",
+    "typescript": "^5.4.5"
+  }
+}
