@@ -6,7 +6,7 @@ import { logger } from '../utils/logger';
 import { BugModePanel } from '../panel/BugModePanel';
 
 export async function runGenerateFromTerminal(target: PromptTarget, panel: BugModePanel): Promise<void> {
-  // Read whatever is selected in the terminal via clipboard trick
+  // Copy terminal selection to clipboard
   await vscode.commands.executeCommand('workbench.action.terminal.copySelection');
   const rawError = (await vscode.env.clipboard.readText()).trim();
 
@@ -21,18 +21,11 @@ export async function runGenerateFromTerminal(target: PromptTarget, panel: BugMo
     const projectContext = extractProjectContext(workspaceRoot, analysis.relatedFiles);
     const prompt = buildPrompt({ rawError, analysis, projectContext, target });
 
-    // Clear current terminal line and type the prompt
-    const terminal = vscode.window.activeTerminal;
-    if (terminal) {
-      // Send Ctrl+C to cancel any partial input, then send the prompt
-      terminal.sendText('', false); // focus
-      await vscode.env.clipboard.writeText(prompt.content);
-      // Clear line then paste prompt as new input
-      terminal.sendText('\x15', false); // Ctrl+U clears the line
-      terminal.sendText(prompt.content, false); // write prompt without executing
-    }
-
+    // Copy prompt to clipboard — user pastes with Ctrl+V wherever they want
+    await vscode.env.clipboard.writeText(prompt.content);
     panel.showPrompt(prompt);
+
+    vscode.window.showInformationMessage('BugMode 🐛: Prompt ready — paste with Ctrl+V');
     logger.info(`Terminal prompt generated for ${target}`);
   } catch (err) {
     logger.error('Failed to generate terminal prompt', err);
