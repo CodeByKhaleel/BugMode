@@ -6,14 +6,18 @@ import { logger } from '../utils/logger';
 import { BugModePanel } from '../panel/BugModePanel';
 
 export async function runGenerateFromTerminal(target: PromptTarget, panel: BugModePanel): Promise<void> {
-  // Copy terminal selection to clipboard
-  await vscode.commands.executeCommand('workbench.action.terminal.copySelection');
-  const rawError = (await vscode.env.clipboard.readText()).trim();
+  // Try clipboard first (user may have already copied the error)
+  const clipboardText = (await vscode.env.clipboard.readText()).trim();
 
-  if (!rawError) {
-    vscode.window.showWarningMessage('BugMode: Select the error text in the terminal first.');
-    return;
-  }
+  const rawError = await vscode.window.showInputBox({
+    title: 'BugMode 🐛 — Paste your error',
+    placeHolder: 'Paste error / stack trace here...',
+    value: clipboardText,
+    ignoreFocusOut: true,
+    prompt: 'Paste the error or stack trace and press Enter',
+  });
+
+  if (!rawError?.trim()) return;
 
   try {
     const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? process.cwd();
@@ -21,7 +25,6 @@ export async function runGenerateFromTerminal(target: PromptTarget, panel: BugMo
     const projectContext = extractProjectContext(workspaceRoot, analysis.relatedFiles);
     const prompt = buildPrompt({ rawError, analysis, projectContext, target });
 
-    // Copy prompt to clipboard — user pastes with Ctrl+V wherever they want
     await vscode.env.clipboard.writeText(prompt.content);
     panel.showPrompt(prompt);
 
