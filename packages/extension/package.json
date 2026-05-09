@@ -111,9 +111,10 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "bundle": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
     "dev": "tsc -p tsconfig.json --watch",
-    "package": "vsce package --no-dependencies",
-    "vscode:prepublish": "pnpm run build"
+    "package": "pnpm run bundle && vsce package --no-dependencies",
+    "vscode:prepublish": "pnpm run bundle"
   },
   "dependencies": {
     "@bugmode/core-engine": "workspace:*",
@@ -124,6 +125,7 @@
     "@types/node": "20",
     "@types/vscode": "^1.89.0",
     "@vscode/vsce": "^2.26.1",
+    "esbuild": "^0.28.0",
     "typescript": "^5.4.5"
   }
 }
