@@ -1,85 +1,172 @@
 # BugMode 🐛
 
-> Context Engineering Layer for AI debugging.
+> Context Engineering Layer for AI Debugging
 
-BugMode is a local-first VSCode extension that transforms raw errors and stack traces into structured, optimized prompts for AI coding agents (Claude, Cursor, Codex, etc.).
+BugMode transforms raw errors and stack traces into AI-optimized debugging context for tools like Claude, Cursor, and Codex.
 
-## Why BugMode?
+Instead of pasting cryptic errors into AI chats, BugMode analyzes your project structure, runtime, framework, and related files to generate precision-targeted debugging prompts automatically.
 
-Pasting raw errors into AI tools gives poor results — missing context leads to generic answers. BugMode acts as a **context engineering layer** that:
+---
 
-- Parses and categorizes errors automatically
-- Detects your runtime, framework, and project structure
-- Identifies probable root causes and related files
-- Generates precision-targeted prompts for your AI tool of choice
+## 🎥 Demo
 
-## Monorepo Structure
+<p align="center">
+  <img src="./assets/demo.gif" width="100%" />
+</p>
 
-```
+> Select error → Generate context → Paste into AI → Get better fixes.
+
+---
+
+# Why BugMode Exists
+
+AI coding assistants are powerful — but they fail when context is incomplete.
+
+Raw stack traces lack:
+
+* Project architecture
+* Runtime details
+* Related files
+* Framework awareness
+* Root cause hints
+
+BugMode acts as a **context engineering layer** between your codebase and your AI assistant.
+
+---
+
+# ✨ Features
+
+* 🧠 Smart error categorization
+* ⚡ Runtime & framework detection
+* 📁 Related file discovery
+* 🏗 Project architecture awareness
+* 🎯 AI-specific prompt optimization
+* 🔒 Local-first (no telemetry / no API calls)
+* 🧩 Model agnostic (Claude, Cursor, Codex, etc.)
+
+---
+
+# 🏗 Architecture
+
+```txt
 packages/
-├── core-engine/     # Error analysis: parser, runtime/framework detector, categorizer
-├── parsers/         # Project context extraction: package.json, file finder, architecture hints
-├── prompt-builder/  # Prompt generation strategies: Claude, Cursor, Generic
-└── extension/       # VSCode extension: commands, side panel, clipboard
+├── core-engine/     → Error analysis & categorization
+├── parsers/         → Project context extraction
+├── prompt-builder/  → AI-specific prompt generation
+└── extension/       → VSCode integration
 ```
 
-## Quick Start
+---
+
+# 🔍 Example
+
+## Input
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Build all packages
-pnpm build
-
-# Or build individually
-pnpm --filter @bugmode/core-engine build
-pnpm --filter @bugmode/parsers build
-pnpm --filter @bugmode/prompt-builder build
-pnpm --filter bugmode build
+TypeError: Cannot read properties of undefined (reading 'map')
 ```
 
-## Using the Extension
+## Generated Context
 
-### In VSCode
+```txt
+Framework: React
+Runtime: Node.js 20
+Probable Cause:
+- API response shape mismatch
+- Missing null guard before render
 
-1. Open the repo in VSCode
-2. Press `F5` to launch the Extension Development Host
-3. In the new window, select any error or stack trace text
-4. Right-click → **BugMode 🐛** → choose your target
-5. Or use `Ctrl+Shift+B` (Cmd+Shift+B on Mac) for Claude
+Related Files:
+- src/components/UserList.tsx
+- src/hooks/useUsers.ts
 
-The generated prompt is:
-- Shown in the **BugMode side panel** (Explorer sidebar)
-- **Copied to clipboard** automatically
+Suggested Fix Strategy:
+1. Add optional chaining
+2. Validate API response
+3. Add loading fallback
+```
 
-### Commands
+---
 
-| Command | Description |
-|---|---|
-| `BugMode: Generate for Claude` | Optimized for Claude's reasoning style |
-| `BugMode: Generate for Cursor` | Inline fix format for Cursor |
-| `BugMode: Generate Debug Context` | Generic AI-ready prompt |
+# ⚡ Quick Start
 
-### Settings
+```bash
+pnpm install
+pnpm build
+```
 
-| Setting | Default | Description |
-|---|---|---|
-| `bugmode.defaultTarget` | `claude` | Default AI target |
-| `bugmode.debugMode` | `false` | Verbose output logging |
-
-## Architecture Principles
-
-- **Local-first** — no cloud, no API calls, no telemetry
-- **Model-agnostic** — works with any AI tool
-- **Fast** — deterministic analysis, no ML inference
-- **Extensible** — add new prompt strategies or detectors easily
-
-## Packaging for VSCode Marketplace
+Launch extension:
 
 ```bash
 cd packages/extension
-pnpm package   # generates bugmode-0.0.1.vsix
+pnpm dev
 ```
 
-Install locally: `code --install-extension bugmode-0.0.1.vsix`
+Press `F5` inside VSCode.
+
+---
+
+# 🖥 VSCode Usage
+
+1. Select an error or stack trace
+2. Right click → `BugMode 🐛`
+3. Choose target AI assistant
+4. Prompt gets:
+
+   * copied to clipboard
+   * shown in side panel
+
+---
+
+# 📦 Commands
+
+| Command                | Purpose                    |
+| ---------------------- | -------------------------- |
+| Generate for Claude    | Claude-optimized reasoning |
+| Generate for Cursor    | Inline fix formatting      |
+| Generate Debug Context | Generic AI prompt          |
+
+---
+
+# ⚙ Settings
+
+| Setting                 | Default  |
+| ----------------------- | -------- |
+| `bugmode.defaultTarget` | `claude` |
+| `bugmode.debugMode`     | `false`  |
+
+---
+
+# 🔒 Philosophy
+
+BugMode is built around a few core principles:
+
+* Local-first
+* Fast deterministic analysis
+* Zero telemetry
+* Extensible architecture
+* AI-tool independence
+
+---
+
+# 🛣 Roadmap
+
+* [ ] AST-aware analysis
+* [ ] Multi-error correlation
+* [ ] Git-aware debugging context
+* [ ] Terminal integration
+* [ ] JetBrains extension
+* [ ] AI-generated fix previews
+
+---
+
+# 🤝 Contributing
+
+PRs, ideas, and feedback are welcome.
+
+If you're interested in AI tooling, debugging systems, or developer experience engineering — contributions are highly appreciated.
+
+---
+
+# ⭐ Support
+
+If BugMode helps you debug faster, consider starring the repo.
